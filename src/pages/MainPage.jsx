@@ -76,15 +76,28 @@ export const mainPageAction = async ({request}) => {
             return {error: "Repeated password and password must be the same"}
         }
     
-    
+        const id = crypto.randomUUID()
+
         const newUser = {
-            id: crypto.randomUUID(),
+            id: id,
             login: login,
             pass: pass
         }
     
         try {
             await postRequest("http://localhost:3000/users/", newUser)
+        } catch {
+            return {error: "Something went wrong"} 
+        }
+
+        const newCurrentUser = {
+            id: id,
+            isLogged: true
+        }
+        
+    
+        try {
+            await putRequest("http://localhost:3000/currentUser/", newCurrentUser)
         } catch {
             return {error: "Something went wrong"} 
         }
