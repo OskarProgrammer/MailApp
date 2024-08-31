@@ -99,7 +99,8 @@ export const mainPageAction = async ({request}) => {
             id: id,
             login: login,
             pass: pass,
-            messages: []
+            messages: [],
+            bin: []
         }
     
         try {
