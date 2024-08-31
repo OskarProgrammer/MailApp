@@ -11,6 +11,7 @@ import { MailLayout, mailLayoutloader } from './layouts/MailLayout'
 
 //pages
 import { MainPage, mainPageAction } from './pages/MainPage'
+import { logOutLoader, LogOutPage } from './pages/LogOutPage'
 
 
 const router = createBrowserRouter(
@@ -18,8 +19,8 @@ const router = createBrowserRouter(
     <Route path="/" element={<HomeLayout/>} action={mainPageAction}>
         <Route index element={<MainPage/>} action={mainPageAction}/>
 
-        <Route path="/mail/" element={<MailLayout/>} loader={mailLayoutloader}>
-
+        <Route path="/mail/" element={<MailLayout/>} loader={mailLayoutloader} >
+            <Route path="logOut" element={<LogOutPage/>} loader={logOutLoader}/>
         </Route>
     </Route>
   )
