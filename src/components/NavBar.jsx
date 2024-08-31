@@ -1,10 +1,7 @@
 import { NavLink } from "react-router-dom"
 
 
-export const NavBar = (props) => {
-
-
-
+export const NavBar = () => {
     return(
         <div className="navbar bg-light m-3 px-4 py-3 fs-5 rounded-pill">
                 <div className="col-lg-6">
