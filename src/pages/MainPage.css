@@ -1,0 +1,10 @@
+.mainPage a {
+    color: black;
+    transition: 0.5s ease;
+}
+
+
+.mainPage a:hover {
+    cursor: pointer;
+    color: rgb(147, 147, 213) !important;
+}
