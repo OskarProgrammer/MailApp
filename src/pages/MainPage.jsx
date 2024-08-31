@@ -6,8 +6,7 @@ import "./MainPage.css"
 export const MainPage = () => {
     const [isLoginPage, setIsLoginPage] = useState(true)
     const actionData = useActionData()
-    console.log(actionData)
-
+    
     return (
         <div className={`mainPage container-lg-fluid container-md-5 bg-dark text-dark d-flex ${isLoginPage ? "justify-content-start" : "justify-content-end"} p-5 my-5 fs-3`}>
             {isLoginPage ? <div className="col-lg-6 col-md-6 col-sm-8 col-12 text-center bg-light p-5 rounded">
