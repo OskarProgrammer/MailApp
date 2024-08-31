@@ -13,6 +13,7 @@ export const MailLayout = () => {
                 <div className="col-lg-1 bg-light rounded d-flex flex-column py-3">
                     <NavLink className="btn btn-outline-dark m-2"><i class="bi bi-chat-fill fs-2"/></NavLink>
                     <NavLink className="btn btn-outline-dark m-2"><i class="bi bi-chat fs-2"/></NavLink>
+                    <NavLink className="btn btn-outline-dark m-2"><i class="bi bi-people-fill fs-2"/></NavLink>
                     <NavLink className="btn btn-outline-dark m-2"><i class="bi bi-trash fs-2"/></NavLink>
                 </div>
                 <div className="col-lg-11 bg-light rounded">
