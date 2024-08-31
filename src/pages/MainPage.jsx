@@ -81,7 +81,8 @@ export const mainPageAction = async ({request}) => {
         const newUser = {
             id: id,
             login: login,
-            pass: pass
+            pass: pass,
+            messages: []
         }
     
         try {
