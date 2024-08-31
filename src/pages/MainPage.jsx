@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { Form, redirect, useActionData } from "react-router-dom"
-import "./MainPage.css"
+import { Form, redirect } from "react-router-dom"
 import { getRequest, postRequest, putRequest } from "../API/requests"
+import "./MainPage.css"
 
 export const MainPage = () => {
     const [isLoginPage, setIsLoginPage] = useState(true)
@@ -12,7 +12,7 @@ export const MainPage = () => {
                 <Form method="POST" action="/" className="d-flex flex-column gap-4 p-5 fs-5">
                     <h1 className="display-4 fw-bold my-4 mx-auto">Login Form</h1>
                     <input type="text" name="login" placeholder="Login" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
-                    <input type="pass" name="pass" placeholder="Password" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
+                    <input type="password" name="pass" placeholder="Password" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
                     <p className="fs-5 fst-italic">Havent got email yet? <a onClick={()=>{setIsLoginPage(!isLoginPage)}}>Click here</a></p>
                     <button className="btn btn-outline-dark col-lg-6 mx-auto">Login</button>
                 </Form>
@@ -21,8 +21,8 @@ export const MainPage = () => {
                 <Form method="POST" action="/" className="d-flex flex-column gap-4 p-5 fs-5">
                     <h1 className="display-4 fw-bold my-4">Register Form</h1>
                     <input type="text" name="login" placeholder="Login" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
-                    <input type="pass" name="pass" placeholder="Password" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
-                    <input type="pass" name="repeatedPass" placeholder="Repeat password" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
+                    <input type="password" name="pass" placeholder="Password" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
+                    <input type="password" name="repeatedPass" placeholder="Repeat password" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
                     <p className="fs-5 fst-italic">Have got email already? <a onClick={()=>{setIsLoginPage(!isLoginPage)}}>Click here</a></p>
                     <button className="btn btn-outline-dark col-lg-6 mx-auto">Register</button>
                 </Form>
@@ -68,26 +68,27 @@ export const mainPageAction = async ({request}) => {
         }
 
         return redirect("/mail/")
+
+    }else{
+        if (login == "" || pass == ""){
+            return {error: "Login and password must be provided"}
+        } else if (pass != repeatedPass) {
+            return {error: "Repeated password and password must be the same"}
+        }
+    
+    
+        const newUser = {
+            id: crypto.randomUUID(),
+            login: login,
+            pass: pass
+        }
+    
+        try {
+            await postRequest("http://localhost:3000/users/", newUser)
+        } catch {
+            return {error: "Something went wrong"} 
+        }
+    
+        return redirect("/mail/")
     }
-
-    if (login == "" || pass == ""){
-        return {error: "Login and password must be provided"}
-    } else if (pass != repeatedPass) {
-        return {error: "Repeated password and password must be the same"}
-    }
-
-
-    const newUser = {
-        id: crypto.randomUUID(),
-        login: login,
-        pass: pass
-    }
-
-    try {
-        await postRequest("http://localhost:3000/users/", newUser)
-    } catch {
-        return {error: "Something went wrong"} 
-    }
-
-    return redirect("/mail/")
 }
