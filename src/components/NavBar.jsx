@@ -7,7 +7,7 @@ export const NavBar = () => {
                     <NavLink to="/mail/" className="btn btn-outline-dark btn-lg">Home</NavLink>
                 </div>
                 <div className="col-lg-6 d-flex justify-content-end gap-3">
-                    <NavLink className="btn btn-outline-success btn-lg">Send message</NavLink>
+                    <NavLink className="btn btn-outline-success btn-lg"><i class="bi bi-send"></i></NavLink>
                     <NavLink to="/mail/logOut" className="btn btn-outline-danger btn-lg">Log Out</NavLink>
                 </div>
         </div>
