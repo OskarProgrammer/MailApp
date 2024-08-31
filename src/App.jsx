@@ -1,21 +1,23 @@
 
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
+
+//styles
 import './App.css'
 
 //importing bootstrap
 import 'bootstrap/dist/css/bootstrap.css'
 
 //layouts
-import { HomeLayout } from './layouts/HomeLayout'
-import { MailLayout, mailLayoutloader } from './layouts/MailLayout'
+import { HomeLayout } from './layouts/HomeLayout/HomeLayout'
+import { MailLayout, mailLayoutloader } from './layouts/MailLayout/MailLayout'
 
 //pages
-import { MainPage, mainPageAction } from './pages/MainPage'
-import { logOutLoader, LogOutPage } from './pages/LogOutPage'
-import { mailLoader, MainPageMail } from './pages/MainPageMail'
-import { newMailAction, NewMailPage } from './pages/NewMailPage'
-import { sentMessagesLoader, SentMessagesPage } from './pages/SentMessagesPage'
-import { mailDetailsLoader, MailDetailsPage } from './pages/MailDetailsPage'
+import { MainPage, mainPageAction } from './pages/MainPage/MainPage'
+import { logOutLoader, LogOutPage } from './pages/LogOutPage/LogOutPage'
+import { mailLoader, MainPageMail } from './pages/MainPageMail/MainPageMail'
+import { newMailAction, NewMailPage } from './pages/NewMailPage/NewMailPage'
+import { sentMessagesLoader, SentMessagesPage } from './pages/SentMessagesPage/SentMessagesPage'
+import { mailDetailsLoader, MailDetailsPage } from './pages/MailDetailsPage/MailDetailsPage'
 
 
 const router = createBrowserRouter(

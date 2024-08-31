@@ -1,5 +1,7 @@
 import { redirect, useLoaderData } from "react-router-dom"
-import { putRequest } from "../API/requests"
+
+//api
+import { putRequest } from "../../API/requests"
 
 export const LogOutPage = () => {
     const loaderData = useLoaderData()

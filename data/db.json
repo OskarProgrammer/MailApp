@@ -1,5 +1,20 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "14186984-f0bc-463a-9f53-7f7c3096e6d7",
+      "login": "Oskar",
+      "pass": "root",
+      "messages": [],
+      "bin": []
+    },
+    {
+      "id": "4c8ad39e-84ef-484a-9d1e-266b052c6439",
+      "login": "Robert",
+      "pass": "123",
+      "messages": [],
+      "bin": []
+    }
+  ],
   "currentUser": {
     "id": "",
     "isLogged": false

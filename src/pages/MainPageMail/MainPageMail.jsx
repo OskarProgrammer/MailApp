@@ -1,5 +1,9 @@
 import { useLoaderData } from "react-router-dom"
-import { getRequest, getRequestId } from "../API/requests"
+
+//api
+import { getRequest, getRequestId } from "../../API/requests"
+
+//styles
 import "./MainPageMail.css"
 
 export const MainPageMail = () => {

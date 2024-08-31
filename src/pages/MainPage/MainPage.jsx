@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { Form, redirect, useActionData } from "react-router-dom"
-import { getRequest, postRequest, putRequest } from "../API/requests"
+
+//api
+import { getRequest, postRequest, putRequest } from "../../API/requests"
+
+//styles
 import "./MainPage.css"
 
 export const MainPage = () => {

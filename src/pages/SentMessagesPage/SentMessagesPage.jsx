@@ -1,7 +1,11 @@
-import { redirect, useLoaderData } from "react-router-dom"
-import { getRequest, getRequestId, putRequest } from "../API/requests"
 import { useState } from "react"
-import { MessageTab } from "../components/MessageTab"
+import { redirect, useLoaderData } from "react-router-dom"
+
+//api
+import { getRequest, getRequestId, putRequest } from "../../API/requests"
+
+//components
+import { MessageTab } from "../../components/MessageTab"
 
 export const SentMessagesPage = () => {
     const messagesSent = useLoaderData()

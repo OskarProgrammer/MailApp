@@ -1,6 +1,12 @@
 import { NavLink, Outlet, redirect } from "react-router-dom"
-import { getRequest, getRequestId } from "../API/requests"
-import { NavBar } from "../components/NavBar"
+
+//api
+import { getRequest, getRequestId } from "../../API/requests"
+
+//components
+import { NavBar } from "../../components/NavBar"
+
+//styles
 import "./MailLayout.css"
 
 export const MailLayout = () => {

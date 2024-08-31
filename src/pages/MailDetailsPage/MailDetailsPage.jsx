@@ -1,5 +1,7 @@
 import { useLoaderData } from "react-router-dom"
-import { getRequest, getRequestId } from "../API/requests"
+
+//api
+import { getRequest, getRequestId } from "../../API/requests"
 
 export const MailDetailsPage = () => {
     const data = useLoaderData()

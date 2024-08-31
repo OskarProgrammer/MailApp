@@ -1,6 +1,11 @@
 import { Form, redirect } from "react-router-dom"
+
+//api
+import { getRequest, getRequestId, putRequest } from "../../API/requests"
+
+//styles
 import "./NewMailPage.css"
-import { getRequest, getRequestId, putRequest } from "../API/requests"
+
 
 export const NewMailPage = () => {
 
