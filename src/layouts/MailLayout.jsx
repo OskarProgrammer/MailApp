@@ -1,20 +1,22 @@
-import { NavLink, redirect } from "react-router-dom"
+import { NavLink, Outlet, redirect } from "react-router-dom"
 import { getRequest, getRequestId } from "../API/requests"
+import { NavBar } from "../components/NavBar"
 
 export const MailLayout = () => {
 
     return (
         <div className="text-light">
-            <div className="navbar bg-light m-2 px-4 py-3 fs-5 rounded-pill">
-                <div className="col-lg-6">
-                    <NavLink to="/mail/" className="btn btn-outline-dark btn-lg">Home</NavLink>
+            <NavBar/>
+
+            <div className="text-dark fs-5 ms-4 me-5 my-3 d-flex justify-content-start gap-4 text-center">
+                <div className="col-lg-1 bg-light rounded d-flex flex-column py-3 gap-3">
+                    <i class="bi bi-chat-fill fs-2"></i>
+                    <i class="bi bi-trash fs-2"></i>
                 </div>
-                <div className="col-lg-6 d-flex justify-content-end gap-3">
-                    <NavLink className="btn btn-outline-success btn-lg">Send message</NavLink>
-                    <NavLink to="/mail/logOut" className="btn btn-outline-danger btn-lg">Log Out</NavLink>
+                <div className="col-lg-11 bg-light rounded">
+                    <Outlet/>
                 </div>
             </div>
-
         </div>
     )
 }
