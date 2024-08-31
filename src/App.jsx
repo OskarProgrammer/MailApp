@@ -1,12 +1,36 @@
 
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import './App.css'
+
+//importing bootstrap
 import 'bootstrap/dist/css/bootstrap.css'
 
+//layouts
+import { HomeLayout } from './layouts/HomeLayout'
+import { MailLayout, mailLayoutloader } from './layouts/MailLayout'
+
+//pages
+import { MainPage, mainPageAction } from './pages/MainPage'
+
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<HomeLayout/>} action={mainPageAction}>
+        <Route index element={<MainPage/>} action={mainPageAction}/>
+
+        <Route path="/mail/" element={<MailLayout/>} loader={mailLayoutloader}>
+
+        </Route>
+    </Route>
+  )
+)
+
+
 function App() {
-  
 
   return (
     <>
+      <RouterProvider router={router} />
     </>
   )
 }
