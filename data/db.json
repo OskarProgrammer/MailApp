@@ -1,10 +1,7 @@
 {
-  "users": [
-    {
-      "id": "1",
-      "login": "Oskar",
-      "pass": "root"
-    }
-  ],
-  "currentUser": {}
+  "users": [],
+  "currentUser": {
+    "id": "",
+    "isLogged": false
+  }
 }
