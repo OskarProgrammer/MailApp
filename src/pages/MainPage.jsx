@@ -1,10 +1,12 @@
 import { useState } from "react"
-import { Form, redirect } from "react-router-dom"
+import { Form, redirect, useActionData } from "react-router-dom"
 import { getRequest, postRequest, putRequest } from "../API/requests"
 import "./MainPage.css"
 
 export const MainPage = () => {
     const [isLoginPage, setIsLoginPage] = useState(true)
+    const actionData = useActionData()
+    console.log(actionData)
 
     return (
         <div className={`mainPage container-lg-fluid container-md-5 bg-dark text-dark d-flex ${isLoginPage ? "justify-content-start" : "justify-content-end"} p-5 my-5 fs-3`}>
@@ -14,6 +16,7 @@ export const MainPage = () => {
                     <input type="text" name="login" placeholder="Login" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
                     <input type="password" name="pass" placeholder="Password" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
                     <p className="fs-5 fst-italic">Havent got email yet? <a onClick={()=>{setIsLoginPage(!isLoginPage)}}>Click here</a></p>
+                    {actionData && actionData.error && <p class="text-danger">{actionData.error}</p>}
                     <button className="btn btn-outline-dark col-lg-6 mx-auto">Login</button>
                 </Form>
             </div>: ""}
@@ -24,6 +27,7 @@ export const MainPage = () => {
                     <input type="password" name="pass" placeholder="Password" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
                     <input type="password" name="repeatedPass" placeholder="Repeat password" className="col-lg-10 mx-auto col-sm-12 col-12 p-2"/>
                     <p className="fs-5 fst-italic">Have got email already? <a onClick={()=>{setIsLoginPage(!isLoginPage)}}>Click here</a></p>
+                    {actionData && actionData.error && <p class="text-danger">{actionData.error}</p>}
                     <button className="btn btn-outline-dark col-lg-6 mx-auto">Register</button>
                 </Form>
             </div>: ""}
@@ -74,6 +78,19 @@ export const mainPageAction = async ({request}) => {
             return {error: "Login and password must be provided"}
         } else if (pass != repeatedPass) {
             return {error: "Repeated password and password must be the same"}
+        }
+
+        const users = await getRequest("http://localhost:3000/users/")
+        let isTaken = false
+
+        users.map((user)=>{
+            if (user.login == login){
+                isTaken = true
+            }
+        })
+
+        if (isTaken) {
+            return {error: "This login is taken"}
         }
     
         const id = crypto.randomUUID()
