@@ -22,7 +22,7 @@ export const MailDetailsPage = () => {
             <h1 className="display-3 fw-bold">Subject: {data.subject}</h1>
             <p className="display-5 fst-italic">From: {data.senderData.login}</p>
             <p className="display-5 fst-italic">To:</p>
-            <div className="container-fluid d-flex justify-content-center gap-2 m-3">
+            <div className="container-fluid d-flex justify-content-center gap-2 my-3">
                 {data.receiverData.map((receiver)=>(
                     <ReceiverTab receiverInfo={receiver}/>
                 ))}
@@ -71,10 +71,16 @@ export const mailDetailsLoader = async ({params}) => {
     const senderData = await getRequestId("http://localhost:3000/users/", mailDetails.from)
 
     let receiverData = []
-    mailDetails.to.map(async (receiver)=>{
-        let rec = await getRequestId("http://localhost:3000/users/", receiver.id)
+    
+    try {
+        mailDetails.to.map(async (receiver)=>{
+            let rec = await getRequestId("http://localhost:3000/users/", receiver.id)
+            receiverData.push(rec)
+        })
+    } catch {
+        let rec = await getRequestId("http://localhost:3000/users/", mailDetails.to)
         receiverData.push(rec)
-    })
+    }
     
 
 
