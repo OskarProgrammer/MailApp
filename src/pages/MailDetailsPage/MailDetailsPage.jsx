@@ -18,17 +18,18 @@ export const MailDetailsPage = () => {
     }, [])
 
     return (
-        <div className="container-fluid p-3">
+        <div className="container-fluid p-3 mb-4">
             <h1 className="display-3 fw-bold">Subject: {data.subject}</h1>
             <p className="display-5 fst-italic">From: {data.senderData.login}</p>
             <p className="display-5 fst-italic">To:</p>
+
             <div className="container-fluid d-flex justify-content-center gap-2 my-3">
                 {data.receiverData.map((receiver)=>(
                     <ReceiverTab receiverInfo={receiver}/>
                 ))}
             </div>
 
-            <div className="fs-3 border border-1 border-dark">
+            <div className="text-light bg-dark fs-3 border border-1 border-dark p-3 rounded ">
                 {data.content}
             </div>
         </div>
