@@ -12,35 +12,34 @@ export const SentMessagesPage = () => {
     let [messages, setMessages] = useState(messagesSent)
 
     const deleteMail = async (messageId) => {
-        const users = await getRequest("http://localhost:3000/users/")
-        let messageInfo = {}
-        let newMessages = []
-        let newUserInfo = {}
-        
-        users.map((user)=>{
-            user.messages.map((message)=>{
-                if (message.id == messageId){
-                    messageInfo = message 
-                    newUserInfo = user
-                } else {
-                    newMessages.push(message)
-                }
-            })
+        const {id} = await getRequest("http://localhost:3000/currentUser/")
+        let currentUserData = await getRequestId("http://localhost:3000/users/", id)
+
+        let messageToRemove = {}
+        //filtring data in messages of current user
+        currentUserData.messages = currentUserData.messages.filter((message)=>{
+            if (message.id == messageId){
+                messageToRemove = message
+            }
+            return message.id != messageId
         })
 
-        newUserInfo.messages = newMessages
-        newUserInfo.bin = [messageInfo, ...newUserInfo.bin]
-        try {
-            await putRequest(`http://localhost:3000/users/${newUserInfo.id}`,newUserInfo)
-        } catch {
-            throw new Error("Error during updating data")
-        }
+        //adding message to the bin 
+        currentUserData.bin = [messageToRemove, ...currentUserData.bin]
 
-        messages = newMessages
+        //updating data in useState variables
+        messages = currentUserData.messages
         setMessages(messages)
 
-        return redirect(".")
+        try {
+            await putRequest(`http://localhost:3000/users/${id}`,currentUserData)
+        } catch {
+            throw new Error("Error during updating the data")
+        }
+
+
     }
+
 
     return (
         <div className="container-fluid">
