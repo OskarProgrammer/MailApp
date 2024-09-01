@@ -18,7 +18,7 @@ export const MailLayout = () => {
             <div className="mainSection text-dark fs-5 ms-4 me-5 my-3 d-flex justify-content-start gap-4 text-center">
                 <div className="col-lg-1 bg-light rounded d-flex flex-column py-3">
                     <NavLink to="/mail/sentMessages" className="btn btn-outline-dark m-2"><i class="bi bi-send fs-2"/></NavLink>
-                    <NavLink className="btn btn-outline-dark m-2"><i class="bi bi-chat fs-2"/></NavLink>
+                    <NavLink to="/mail/receivedMessages" className="btn btn-outline-dark m-2"><i class="bi bi-chat fs-2"/></NavLink>
                     <NavLink className="btn btn-outline-dark m-2"><i class="bi bi-people-fill fs-2"/></NavLink>
                     <NavLink to="/mail/bin" className="btn btn-outline-danger m-2"><i class="bi bi-trash fs-2"/></NavLink>
                 </div>
