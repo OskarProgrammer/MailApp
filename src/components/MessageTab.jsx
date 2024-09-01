@@ -6,7 +6,7 @@ export const MessageTab = (props) => {
     return (
         <div className="container-fluid border border-1 border-dark p-3">
             <h2 className="display-5 fw-bold">Subject: {message.subject}</h2>
-            <p className="display-6">To: {message.to}</p>
+            <p className="display-6"></p>
             <button onClick={()=>{props.onDelete(message.id)}} className="btn btn-outline-danger btn-lg me-3">Remove</button>
             <Link to={`/mail/${message.id}`} className="btn btn-outline-primary btn-lg">See details</Link>
         </div>
