@@ -161,5 +161,15 @@ export const newMailAction = async ({request}) => {
         }
     })
 
+    let currentUser = await getRequestId("http://localhost:3000/users/",id)
+    currentUser.receivers = []
+    try{
+        await putRequest(`http://localhost:3000/users/${id}`, currentUser)
+    } catch {
+        throw new Error("Something went wrong during sending mail")
+    }
+
+
+
     return redirect("/mail/")
 }
