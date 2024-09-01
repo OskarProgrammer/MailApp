@@ -83,7 +83,7 @@ export const NewMailPage = () => {
         <Form method="POST" action="/mail/sendMail" className="addSection container-fluid d-flex flex-column gap-3 py-4 text-light">
             <div className="container-fluid d-flex gap-2">
                 <input type="text" value={receiverName} onChange={(e)=>{setReceiverName(e.target.value)}} placeholder="Destination mail:" className="col-lg-11 col-md-10 col-sm-10 col-9 rounded-pill border-1 border-dark text-center p-1" />
-                <button type="button" className="col-lg-1 col-md-2 col-sm-2 col-3 btn btn-outline-success btn-lg" onClick={()=>{addPerson()}} >Add</button>
+                <button type="button" className="col-lg-1 col-md-2 col-sm-2 col-3 btn btn-outline-success btn-lg" onClick={()=>{addPerson()}} ><i class="bi bi-plus-lg"/></button>
             </div>
             <div className="container-fluid d-flex gap-2">
                 {receivers.map((receiver)=>(
@@ -95,7 +95,7 @@ export const NewMailPage = () => {
             </div>
             <input type="text" name="mailSubject" placeholder="Subject of the mail" className="rounded-pill border-1 border-dark text-center p-1" />
             <textarea name="mailContent" placeholder="Your mail" className="textAreaHeight rounded p-2 text-center"></textarea>
-            <button className="btn btn-outline-success btn-lg">Send!</button>
+            <button className="btn btn-outline-success btn-lg"><i class="bi bi-send-check-fill"/></button>
         </Form>
     )
 }

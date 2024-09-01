@@ -5,18 +5,37 @@
       "login": "Oskar",
       "pass": "root",
       "messages": [],
-      "bin": []
+      "bin": [],
+      "receivers": []
     },
     {
       "id": "4c8ad39e-84ef-484a-9d1e-266b052c6439",
       "login": "Robert",
       "pass": "123",
+      "messages": [
+        {
+          "id": "252cea59-44d9-46e3-a83e-49434b1c052b",
+          "type": "received",
+          "from": "14186984-f0bc-463a-9f53-7f7c3096e6d7",
+          "to": "4c8ad39e-84ef-484a-9d1e-266b052c6439",
+          "subject": "test",
+          "content": "test"
+        }
+      ],
+      "bin": [],
+      "receivers": []
+    },
+    {
+      "id": "835dadc2-435a-4ca0-8cc2-97d5eef8348c",
+      "login": "Laura",
+      "pass": "123",
       "messages": [],
-      "bin": []
+      "bin": [],
+      "receivers": []
     }
   ],
   "currentUser": {
-    "id": "",
-    "isLogged": false
+    "id": "14186984-f0bc-463a-9f53-7f7c3096e6d7",
+    "isLogged": true
   }
 }

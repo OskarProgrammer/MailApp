@@ -22,7 +22,7 @@ export const MailDetailsPage = () => {
             <h1 className="display-3 fw-bold">Subject: {data.subject}</h1>
             <p className="display-5 fst-italic">From: {data.senderData.login}</p>
             <p className="display-5 fst-italic">To:</p>
-            <div className="container-fluid d-flex gap-2 m-3">
+            <div className="container-fluid d-flex justify-content-center gap-2 m-3">
                 {data.receiverData.map((receiver)=>(
                     <ReceiverTab receiverInfo={receiver}/>
                 ))}
@@ -44,8 +44,14 @@ export const mailDetailsLoader = async ({params}) => {
     users.map((user)=>{
         user.messages.map((message)=>{
             if (message.id == id){
-                isFound = true
                 mailDetails = message
+                isFound = true
+            }
+        })
+        user.bin.map((message)=>{
+            if (message.id == id){
+                mailDetails = message
+                isFound = true
             }
         })
     })
