@@ -104,7 +104,8 @@ export const mainPageAction = async ({request}) => {
             pass: pass,
             messages: [],
             bin: [],
-            receivers: []
+            receivers: [],
+            contacts: []
         }
     
         try {
