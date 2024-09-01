@@ -20,6 +20,7 @@ import { sentMessagesLoader, SentMessagesPage } from './pages/SentMessagesPage/S
 import { mailDetailsLoader, MailDetailsPage } from './pages/MailDetailsPage/MailDetailsPage'
 import { binLoader, BinPage } from './pages/BinPage/BinPage'
 import { receivedMessagesLoader, ReceivedMessagesPage } from './pages/ReceivedMessagesPage/ReceivedMessagesPage'
+import { contactsAction, contactsLoader, ContactsPage } from './pages/ContactsPage/ContactsPage'
 
 
 const router = createBrowserRouter(
@@ -31,6 +32,7 @@ const router = createBrowserRouter(
             <Route index element={<MainPageMail/>} loader={mailLoader}/>
             <Route path="sentMessages" element={<SentMessagesPage/>} loader={sentMessagesLoader}/>
             <Route path="receivedMessages" element={<ReceivedMessagesPage/>} loader={receivedMessagesLoader}/>
+            <Route path="contacts" element={<ContactsPage/>} loader={contactsLoader} action={contactsAction}/>
             <Route path="bin" element={<BinPage/>} loader={binLoader}/>
             <Route path="sendMail" element={<NewMailPage/>} action={newMailAction}/>
             <Route path=":id" element={<MailDetailsPage/>} loader={mailDetailsLoader}/>
