@@ -1,16 +1,28 @@
-import { Form, redirect } from "react-router-dom"
+import { Form, redirect, useLoaderData, useNavigate } from "react-router-dom"
 
 //api
 import { getRequest, getRequestId, putRequest } from "../../API/requests"
 
 //styles
 import "./NewMailPage.css"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 export const NewMailPage = () => {
+    const contacts = useLoaderData()
+    let [contactsTuples, setContactsTuple] = useState(contacts)
     let [receiverName, setReceiverName] = useState("")
     let [receivers, setReceivers] = useState([])
+
+
+    const navigate = useNavigate()
+
+    useEffect(()=> {
+        const check = setTimeout(()=>{navigate(".")})
+        return () => {
+            clearTimeout(check)
+        }
+    }, [receivers])
 
     const addPerson = async() => {
         //getting all users data
@@ -28,15 +40,10 @@ export const NewMailPage = () => {
                 newUser.login = user.login
             }
         })
-
-
         //verifying if user was found
         if (!isFound) {
             return 
         }
-
-
-
         //setting local useStates variables
         receivers = [receiverName, ...receivers]
         setReceivers(receivers)
@@ -79,17 +86,59 @@ export const NewMailPage = () => {
         }
     }
 
+    const addPersonFromList = async (contact) => {
+        let {id} = await getRequest("http://localhost:3000/currentUser/")
+        let currentUserData = await getRequestId("http://localhost:3000/users/",id)
+
+        if (currentUserData.receivers.includes({
+            id: contact.id,
+            login: contact.login
+        })){
+            return
+        }
+
+        currentUserData.receivers = [{
+            id: contact.id,
+            login: contact.login
+        }, ...currentUserData.receivers]
+
+        if (receivers.includes(contact.login)){
+            return 
+        }
+
+        receivers = [contact.login, ...receivers]
+        setReceivers(receivers)
+
+        try {
+            await putRequest(`http://localhost:3000/users/${id}`, currentUserData)
+        } catch {
+            throw new Error("Error during updating list of receivers")
+        }
+
+        return 
+    }
+
     return(
         <Form method="POST" action="/mail/sendMail" className="addSection container-fluid d-flex flex-column gap-3 py-4 text-light">
             <div className="container-fluid d-flex gap-2">
                 <input type="text" value={receiverName} onChange={(e)=>{setReceiverName(e.target.value)}} placeholder="Destination mail:" className="col-lg-11 col-md-10 col-sm-10 col-9 rounded-pill border-1 border-dark text-center p-1" />
                 <button type="button" className="col-lg-1 col-md-2 col-sm-2 col-3 btn btn-outline-success btn-lg" onClick={()=>{addPerson()}} ><i class="bi bi-plus-lg"/></button>
             </div>
+            <h2 className="display-5 text-dark">Receivers</h2>
             <div className="container-fluid d-flex gap-2">
                 {receivers.map((receiver)=>(
-                    <div className="text-light col-lg-1 bg-success rounded-pill p-2 d-flex gap-2">
+                    <div className="text-light col-lg-1 bg-success rounded-pill p-3 d-flex gap-2">
                         <p className="my-auto">{receiver}</p>
                         <button className="btn btn-outline-danger btn-sm" onClick={()=>{removeReceiver(receiver)}}><i class="bi bi-x"></i></button>
+                    </div>
+                ))}
+            </div>
+            <h2 className="display-5 text-dark">Contacts</h2>
+            <div className="container-fluid d-flex gap-2">
+                {contactsTuples.map((contact)=>(
+                    <div className="text-light col-lg-1 bg-dark rounded-pill d-flex gap-2 p-3">
+                        <p className="my-auto">{contact.login}</p>
+                        <button className="btn btn-outline-success btn-sm" onClick={()=>{addPersonFromList(contact)}}><i class="bi bi-plus-lg"/></button>
                     </div>
                 ))}
             </div>
@@ -99,6 +148,27 @@ export const NewMailPage = () => {
         </Form>
     )
 }
+
+export const newMailLoader = async () => {
+    const {id} = await getRequest("http://localhost:3000/currentUser/")
+    const currentUser = await getRequestId("http://localhost:3000/users/", id)
+    const contacts = currentUser.contacts
+    let betterContacts =[]
+    
+    contacts.map(async (contact)=>{
+        const userInfo = await getRequestId("http://localhost:3000/users/", contact)
+        betterContacts.push(
+            {
+                id: contact,
+                login: userInfo.login
+            }
+        ) 
+    })
+
+    return betterContacts
+}
+
+
 
 export const newMailAction = async ({request}) => {
     const data = await request.formData()
@@ -113,7 +183,7 @@ export const newMailAction = async ({request}) => {
     const destinationMails = currentUserData.receivers
 
     if (destinationMails.length == 0){
-        return
+        return null
     }
 
     //checking if all fields were provided
