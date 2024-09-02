@@ -34,7 +34,7 @@ const router = createBrowserRouter(
             <Route path="receivedMessages" element={<ReceivedMessagesPage/>} loader={receivedMessagesLoader}/>
             <Route path="contacts" element={<ContactsPage/>} loader={contactsLoader} action={contactsAction}/>
             <Route path="bin" element={<BinPage/>} loader={binLoader}/>
-            <Route path="sendMail" element={<NewMailPage/>} action={newMailAction} loader={newMailLoader}/>
+            <Route path="sendMail/:answerId" element={<NewMailPage/>} action={newMailAction} loader={newMailLoader}/>
             <Route path=":id" element={<MailDetailsPage/>} loader={mailDetailsLoader}/>
             <Route path="logOut" element={<LogOutPage/>} loader={logOutLoader}/>
         </Route>
