@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate } from "react-router-dom"
+import { Link, redirect, useLoaderData, useLocation, useNavigate } from "react-router-dom"
 
 //api
 import { getRequest, getRequestId } from "../../API/requests"
@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import { ReceiverTab } from "../../components/ReceiverTab"
 
 export const MailDetailsPage = () => {
-    const dataLoader = useLoaderData()
+    const [dataLoader, currentUser] = useLoaderData()
     const [data, setData] = useState(dataLoader)
     const navigate = useNavigate() 
 
@@ -18,7 +18,7 @@ export const MailDetailsPage = () => {
     }, [])
 
     return (
-        <div className="container-fluid p-3 mb-4">
+        <div className="container-fluid p-3 mb-4 d-flex flex-column">
             <h1 className="display-3 fw-bold">Subject: {data.subject}</h1>
             <p className="display-5 fst-italic">From: {data.senderData.login}</p>
             <p className="display-5 fst-italic">To:</p>
@@ -32,6 +32,9 @@ export const MailDetailsPage = () => {
             <div className="text-light bg-dark fs-3 border border-1 border-dark p-3 rounded ">
                 {data.content}
             </div>
+            
+            {currentUser.id == data.senderData.id ? "" : <Link to={`/mail/sendMail/${data.id}`} className="btn btn-outline-success btn-lg my-3">Response to this mail</Link>}
+            {data.responseTo != "undefined" ? <button className="btn btn-outline-primary btn-lg my-3" onClick={()=>{ navigate(`/mail/${data.responseTo}`)}}>It is response to that mail: {data.responseTo}</button> : ""}
         </div>
     )
 }
@@ -39,18 +42,19 @@ export const MailDetailsPage = () => {
 export const mailDetailsLoader = async ({params}) => {
     const {id} = params
     const users = await getRequest("http://localhost:3000/users/")
+    const currentUserData = await getRequest("http://localhost:3000/currentUser/")
     let isFound = false
     let mailDetails = {}
 
     users.map((user)=>{
         user.messages.map((message)=>{
-            if (message.id == id){
+            if (message.id == id && currentUserData.id == user.id){
                 mailDetails = message
                 isFound = true
             }
         })
         user.bin.map((message)=>{
-            if (message.id == id){
+            if (message.id == id && currentUserData.id == user.id){
                 mailDetails = message
                 isFound = true
             }
@@ -59,7 +63,7 @@ export const mailDetailsLoader = async ({params}) => {
 
     if (!isFound) { throw new Error("Mail not found")}
 
-    const currentUserData = await getRequest("http://localhost:3000/currentUser/")
+    
 
     if (!currentUserData.isLogged){
         throw new Error("You haven't got access to that mail")
@@ -68,6 +72,8 @@ export const mailDetailsLoader = async ({params}) => {
     if (currentUserData.id != mailDetails.from && currentUserData.id != mailDetails.to){
         throw new Error("You haven't got access to that mail")
     }
+
+
 
     const senderData = await getRequestId("http://localhost:3000/users/", mailDetails.from)
 
@@ -88,5 +94,5 @@ export const mailDetailsLoader = async ({params}) => {
     mailDetails.senderData = senderData
     mailDetails.receiverData = receiverData
 
-    return mailDetails
+    return [mailDetails, currentUserData]
 }

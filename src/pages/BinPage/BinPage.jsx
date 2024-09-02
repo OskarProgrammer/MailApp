@@ -64,7 +64,7 @@ export const BinPage = () => {
     }
 
     return (
-        <div className="container-fluid">
+        <div className="container-fluid py-3">
             <h1 className="display-3 p-2 fw-bold">Bin</h1>
             <h1 className="display-5 fw-bold">Messages: {messages.length}</h1>
             {messages.length != 0 ? <button className="btn btn-outline-danger btn-lg my-4 icon-40" onClick={()=>{clearBin()}}>Clear whole bin</button> : ""}

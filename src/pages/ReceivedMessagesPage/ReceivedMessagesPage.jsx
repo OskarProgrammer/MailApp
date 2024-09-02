@@ -47,7 +47,7 @@ export const ReceivedMessagesPage = () => {
             {messages.map((message)=>(
                 <MessageTab messageInfo={message} onDelete={deleteMail} />
             ))}
-
+        
         </div>
     )
 }

@@ -17,10 +17,19 @@
       "bin": [],
       "receivers": [],
       "contacts": []
+    },
+    {
+      "id": "920bba62-4d5d-491d-a1a0-eab071079193",
+      "login": "Laura",
+      "pass": "123",
+      "messages": [],
+      "bin": [],
+      "receivers": [],
+      "contacts": []
     }
   ],
   "currentUser": {
-    "id": "14186984-f0bc-463a-9f53-7f7c3096e6d7",
-    "isLogged": true
+    "id": "",
+    "isLogged": false
   }
 }

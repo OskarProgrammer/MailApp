@@ -4,7 +4,7 @@ export const BinMailTab = (props) => {
     const message = props.messageInfo
 
     return (
-        <div className="container-fluid border border-1 border-dark p-3">
+        <div className="container-fluid border border-1 border-dark p-3 my-4">
             <h2 className="display-5 fw-bold">Subject: {message.subject}</h2>
             <p className="display-6"></p>
             <button className="btn btn-outline-dark btn-lg me-3" onClick={()=>{props.onRestore(message.id)}}><i class="bi bi-arrow-repeat fs-2"/></button>

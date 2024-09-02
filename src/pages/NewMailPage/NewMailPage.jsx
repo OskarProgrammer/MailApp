@@ -1,4 +1,4 @@
-import { Form, redirect, useLoaderData, useNavigate } from "react-router-dom"
+import { Form, Link, redirect, useLoaderData, useNavigate, useParams } from "react-router-dom"
 
 //api
 import { getRequest, getRequestId, putRequest } from "../../API/requests"
@@ -9,8 +9,10 @@ import { useEffect, useState } from "react"
 
 
 export const NewMailPage = () => {
-    const contacts = useLoaderData()
+    const {answerId} = useParams()
+    const [contacts, answerInfo] = useLoaderData()
     let [contactsTuples, setContactsTuple] = useState(contacts)
+    let [answeringTo, setAnsweringTo] = useState(answerInfo)
     let [receiverName, setReceiverName] = useState("")
     let [receivers, setReceivers] = useState([])
 
@@ -22,7 +24,7 @@ export const NewMailPage = () => {
         return () => {
             clearTimeout(check)
         }
-    }, [receivers])
+    }, [])
 
     const addPerson = async() => {
         //getting all users data
@@ -119,20 +121,31 @@ export const NewMailPage = () => {
     }
 
     return(
-        <Form method="POST" action="/mail/sendMail" className="addSection container-fluid d-flex flex-column gap-3 py-4 text-light">
-            <div className="container-fluid d-flex gap-2">
+        <Form method="POST" action={`/mail/sendMail/${answeringTo.id}`} className="addSection container-fluid d-flex flex-column gap-3 py-4 text-light">
+            {answerId != "no-response" ? 
+                <div className="rounded container-fluid text-center text-light bg-success p-3 fw-bold">
+                    <p>Answering to: {answeringTo.id}</p>
+                    <Link to={`/mail/${answeringTo.id}`} className="btn btn-primary">Check details</Link>
+                </div> : ""}
+
+            {answerId == "no-response" ? <div className="container-fluid d-flex gap-2">
                 <input type="text" value={receiverName} onChange={(e)=>{setReceiverName(e.target.value)}} placeholder="Destination mail:" className="col-lg-11 col-md-10 col-sm-10 col-9 rounded-pill border-1 border-dark text-center p-1" />
                 <button type="button" className="col-lg-1 col-md-2 col-sm-2 col-3 btn btn-outline-success btn-lg" onClick={()=>{addPerson()}} ><i class="bi bi-plus-lg"/></button>
-            </div>
+            </div> : ""}
             <h2 className="display-5 text-dark">Receivers</h2>
+            {answerId == "no-response" ? 
             <div className="container-fluid d-flex gap-2">
                 {receivers.map((receiver)=>(
-                    <div className="text-light col-lg-1 bg-success rounded-pill p-3 d-flex gap-2">
+                    <div className="text-light col-lg-2 bg-success rounded-pill p-3 d-flex justify-content-center gap-2">
                         <p className="my-auto">{receiver}</p>
                         <button className="btn btn-outline-danger btn-sm" onClick={()=>{removeReceiver(receiver)}}><i class="bi bi-x"></i></button>
                     </div>
                 ))}
-            </div>
+            </div>: <div className="container-fluid d-flex gap-2">
+                    <div className="text-light col-lg-2 bg-success rounded-pill p-3 d-flex justify-content-center gap-2">
+                        <p className="my-auto">{answeringTo.fromName}</p>
+                    </div>
+            </div>}
             <h2 className="display-5 text-dark">Contacts</h2>
             <div className="container-fluid d-flex gap-2">
                 {contactsTuples.map((contact)=>(
@@ -149,11 +162,13 @@ export const NewMailPage = () => {
     )
 }
 
-export const newMailLoader = async () => {
+export const newMailLoader = async ({params}) => {
+    const {answerId} = params
     const {id} = await getRequest("http://localhost:3000/currentUser/")
     const currentUser = await getRequestId("http://localhost:3000/users/", id)
     const contacts = currentUser.contacts
     let betterContacts =[]
+    let answerInfo = {}
     
     contacts.map(async (contact)=>{
         const userInfo = await getRequestId("http://localhost:3000/users/", contact)
@@ -165,12 +180,22 @@ export const newMailLoader = async () => {
         ) 
     })
 
-    return betterContacts
+    currentUser.messages.map(async (message)=>{
+        if (message.id == answerId){
+            answerInfo = message
+            const user = await getRequestId("http://localhost:3000/users/", message.from)
+            answerInfo.fromName = user.login
+        }
+    })
+
+    return [betterContacts, answerInfo]
 }
 
 
 
-export const newMailAction = async ({request}) => {
+export const newMailAction = async ({request, params}) => {
+    const {answerId} = params
+    let answerInfo = {}
     const data = await request.formData()
 
     //getting data from form
@@ -182,6 +207,21 @@ export const newMailAction = async ({request}) => {
     let currentUserData = await getRequestId("http://localhost:3000/users/", id)
     const destinationMails = currentUserData.receivers
 
+    if (answerId != "no-response"){
+        currentUserData.messages.map(async (message)=>{
+            if (message.id == answerId){
+                answerInfo = message
+                const user = await getRequestId("http://localhost:3000/users/", message.from)
+                answerInfo.fromName = user.login
+            }
+        })
+
+        destinationMails.push({
+            id: answerInfo.from,
+            login: answerInfo.fromName
+        })
+    }
+
     if (destinationMails.length == 0){
         return null
     }
@@ -189,14 +229,20 @@ export const newMailAction = async ({request}) => {
     //checking if all fields were provided
     if (mailSubject == "" || mailContent == "") { return {error: "All fields must be provided"}}
 
+    const idOfMail = crypto.randomUUID()
+
     //sending to owner
-    const newMailSent = {
-        id: crypto.randomUUID(),
+    let newMailSent = {
+        id: idOfMail,
         type: "send",
         from: id,
         to: destinationMails,
         subject: mailSubject,
         content: mailContent
+    }
+
+    if (answerId != "no-response"){
+        newMailSent.responseTo = answerInfo.id
     }
 
     currentUserData.messages = [newMailSent, ...currentUserData.messages]
@@ -211,13 +257,17 @@ export const newMailAction = async ({request}) => {
     //sending to destination
 
     destinationMails.map(async (destination) => {
-        const newMailReceived = {
-            id: crypto.randomUUID(),
+        let newMailReceived = {
+            id: idOfMail,
             type: "received",
             from: id,
             to: destination.id,
             subject: mailSubject,
             content: mailContent
+        }
+
+        if (answerId != "no-response"){
+            newMailReceived.responseTo = answerId
         }
 
         let destinationUserData = await getRequestId("http://localhost:3000/users/",destination.id)
